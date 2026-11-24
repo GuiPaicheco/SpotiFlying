@@ -1,10 +1,10 @@
 [Setup]
 AppId=SpotiFlying.GuiPaicheco.Desktop
 AppName=SpotiFlying
-AppVersion=1.0.0
+AppVersion=1.0.1
 AppPublisher=SpotiFlying
 AppPublisherURL=https://github.com/GuiPaicheco/SpotiFlying
-VersionInfoVersion=1.0.0
+VersionInfoVersion=1.0.1
 DefaultDirName={localappdata}\Programs\SpotiFlying
 DefaultGroupName=SpotiFlying
 DisableProgramGroupPage=yes

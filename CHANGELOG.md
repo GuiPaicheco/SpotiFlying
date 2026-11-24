@@ -1,5 +1,10 @@
 # Alterações
 
+## 1.0.1
+
+- Indica na central quando a busca de letras está desligada e oferece ativação em um clique.
+- Consulta o endpoint de assinatura de faixa do LRCLIB antes de recorrer à busca.
+
 ## 1.0.0
 
 - Letras sobrepostas com presets, LRC, TXT, offsets e demo offline.

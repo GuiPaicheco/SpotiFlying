@@ -8,14 +8,14 @@ Letras sincronizadas sobre o desktop e um cartão independente para a faixa atua
 
 Veja os downloads em [Releases](https://github.com/GuiPaicheco/SpotiFlying/releases). Os arquivos locais gerados pelo build ficam em `release/`.
 
-- **Instalador** · Execute o instalador para instalar por usuário em `%LOCALAPPDATA%\Programs\SpotiFlying`. Remova pelo painel Aplicativos do Windows. [Baixar instalador x64](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SpotiFlying-Setup-x64.exe)
-- **Portátil** · Extraia o ZIP por completo. Abra `SpotiFlying.exe` na pasta extraída e mantenha as dependências junto ao executável. [Baixar ZIP x64](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SpotiFlying-Portable-x64.zip)
-- **Integridade** · Use `Get-FileHash -Algorithm SHA256` no arquivo baixado e compare com o manifesto. Builds sem assinatura podem acionar o SmartScreen. [Baixar manifesto SHA-256](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SHA256SUMS.txt)
+- **Instalador** · Execute o instalador para instalar por usuário em `%LOCALAPPDATA%\Programs\SpotiFlying`. Remova pelo painel Aplicativos do Windows. [Baixar instalador x64](https://github.com/GuiPaicheco/SpotiFlying/releases/latest/download/SpotiFlying-Setup-x64.exe)
+- **Portátil** · Extraia o ZIP por completo. Abra `SpotiFlying.exe` na pasta extraída e mantenha as dependências junto ao executável. [Baixar ZIP x64](https://github.com/GuiPaicheco/SpotiFlying/releases/latest/download/SpotiFlying-Portable-x64.zip)
+- **Integridade** · Use `Get-FileHash -Algorithm SHA256` no arquivo baixado e compare com o manifesto. Builds sem assinatura podem acionar o SmartScreen. [Baixar manifesto SHA-256](https://github.com/GuiPaicheco/SpotiFlying/releases/latest/download/SHA256SUMS.txt)
 
 ## Primeiros passos
 
 1. Abra o Spotify Desktop e toque uma faixa. Experimente **Demo offline** na central para explorar com dados fictícios.
-2. Em **Letras**, vincule um LRC ou TXT. A consulta opcional ao LRCLIB fica em **Integrações**.
+2. Selecione **Ativar busca de letras** na central para consultar o LRCLIB ou vincule seu LRC/TXT na seção **Letras**.
 3. Use **Ctrl+Alt+L** para alternar as sobreposições e **Ctrl+Alt+I** para interagir com o cartão. Volte ao modo passivo com **Esc**. A bandeja abre a central, recupera janelas ocultas e encerra o aplicativo.
 4. Ajuste fonte, linhas, efeitos e layout pela central. **Restaurar visual da referência** volta ao Stories passivo.
 

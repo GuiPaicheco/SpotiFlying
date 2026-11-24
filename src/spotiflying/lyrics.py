@@ -12,6 +12,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from . import __version__
+
 STAMP = r"(\d{1,4}):([0-5]\d)(?:[.:](\d{1,3}))?"
 LINE = re.compile(r"\[" + STAMP + r"\]")
 WORD = re.compile(r"<" + STAMP + r">")
@@ -162,7 +164,7 @@ class LyricsProvider:
     def request(path, params):
         request = Request(
             "https://lrclib.net/api/" + path + "?" + urlencode(params),
-            headers={"User-Agent": "SpotiFlying/1.0 (+https://github.com/GuiPaicheco/SpotiFlying)"},
+            headers={"User-Agent": f"SpotiFlying/{__version__} (+https://github.com/GuiPaicheco/SpotiFlying)"},
         )
         with urlopen(request, timeout=5) as reply:
             payload = reply.read(2_000_001)
@@ -177,9 +179,10 @@ class LyricsProvider:
         if track.album:
             params["album_name"] = track.album
         try:
-            if track.duration and track.album:
+            duration = round(track.duration / 1000)
+            if 1 <= duration <= 3600:
                 try:
-                    exact = self.transport("get-cached", {**params, "duration": round(track.duration / 1000)})
+                    exact = self.transport("get", {**params, "duration": duration})
                 except HTTPError as error:
                     if error.code != 404:
                         raise

@@ -2,7 +2,7 @@ name: Windows x64
 on:
   push:
     branches: [main, 'codex/**']
-    tags: [v1.0.0]
+    tags: [v1.0.1]
   pull_request:
   workflow_dispatch:
 
@@ -52,7 +52,7 @@ jobs:
             release/smoke-zip/smoke.json
           if-no-files-found: error
   publish:
-    if: github.repository == 'GuiPaicheco/SpotiFlying' && github.ref == 'refs/tags/v1.0.0'
+    if: github.repository == 'GuiPaicheco/SpotiFlying' && github.ref == 'refs/tags/v1.0.1'
     needs: build
     runs-on: windows-2022
     permissions:
@@ -68,7 +68,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = 'v1.0.0'
+          $tag = 'v1.0.1'
           gh release create $tag --verify-tag --title "SpotiFlying $tag" --notes-file packaging/RELEASE_NOTES.md assets/SpotiFlying-Setup-x64.exe assets/SpotiFlying-Portable-x64.zip assets/SHA256SUMS.txt
           if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }
           gh release download $tag --dir downloaded

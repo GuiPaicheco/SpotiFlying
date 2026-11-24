@@ -286,8 +286,13 @@ class Content:
         self.update_preview()
 
     def update_preview(self, cue=""):
+        catalog_disabled = bool(self.snapshot and not self.demo and not self.data["catalog"]
+                                and self.lyrics.status == "missing" and self.snapshot.track.artist)
+        self.settings_ui.show_catalog_prompt(catalog_disabled)
         if self.snapshot:
             status = "Escolha uma versão em Letras" if self.candidates else STATUS[self.lyrics.status]
+            if catalog_disabled:
+                status = "Busca de letras desativada"
             text = f"{self.snapshot.track.title} · {self.snapshot.track.artist}\n{status}"
             if self.lyrics.source:
                 text += f" · {self.lyrics.source}"

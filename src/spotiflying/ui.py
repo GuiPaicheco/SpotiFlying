@@ -105,6 +105,15 @@ class SettingsWindow(QMainWindow):
         self.status.setTextFormat(Qt.TextFormat.PlainText)
         self.status.setWordWrap(True)
         outer.addWidget(self.status)
+        self.catalog_prompt = QLabel(
+            "Ao ativar a busca, o app envia título, artista, álbum e duração da faixa ao LRCLIB.",
+            wordWrap=True, objectName="muted",
+        )
+        self.catalog_button = QPushButton("Ativar busca de letras")
+        self.catalog_button.clicked.connect(lambda: self.app.change("catalog", True, False))
+        outer.addWidget(self.catalog_prompt)
+        outer.addWidget(self.catalog_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.show_catalog_prompt(False)
 
         self.appearance()
         self.lyrics()
@@ -419,6 +428,10 @@ class SettingsWindow(QMainWindow):
             if selected and self.monitors.findData(selected) < 0:
                 self.monitors.addItem("Monitor desconectado", selected)
             self.monitors.setCurrentIndex(max(0, self.monitors.findData(selected)))
+
+    def show_catalog_prompt(self, visible):
+        self.catalog_prompt.setVisible(visible)
+        self.catalog_button.setVisible(visible)
 
     def show_preview(self, caption, text, cue=""):
         self.preview_status.setText(caption)

@@ -51,7 +51,7 @@ def test_catalog_exact_and_ambiguous_fallback():
     track = Track("Marés", "Lía", "Cartas", 20001)
 
     def transport(path, params):
-        if path == "get-cached":
+        if path == "get":
             assert params["duration"] == 20
             raise HTTPError("", 404, "", {}, None)
         return [row("Marés", "Cartas", 20), row("Marés", "Cartas", 20.1)]
@@ -60,6 +60,18 @@ def test_catalog_exact_and_ambiguous_fallback():
     result, choices = provider.lookup(track, lambda: False)
     assert result.status == "missing" and len(choices) == 2
     assert provider.lookup(track, lambda: True)[1] == []
+
+
+def test_catalog_uses_documented_signature_lookup_before_search():
+    track = Track("Marés", "Lía", "Cartas", 20100)
+
+    def transport(path, params):
+        assert path == "get"
+        assert params == {"track_name": "Marés", "artist_name": "Lía", "album_name": "Cartas", "duration": 20}
+        return row("Marés", "Cartas", 20)
+
+    result, choices = LyricsProvider(transport).lookup(track, lambda: False)
+    assert result.status == "sync" and not choices
 
 
 @pytest.mark.parametrize("failure,delay", [(HTTPError("", 429, "", {"Retry-After": "65"}, None), 65),
