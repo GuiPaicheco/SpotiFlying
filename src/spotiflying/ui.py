@@ -254,6 +254,7 @@ class SettingsWindow(QMainWindow):
             ("card_opacity", "Opacidade (%)"), ("card_radius", "Raio"), ("card_padding", "Padding"),
             ("card_spacing", "Espaçamento"), ("card_border", "Borda"), ("card_shadow", "Sombra"),
             ("card_align", "Alinhamento"), ("card_layout", "Layout"), ("autohide", "Ocultação automática"),
+            ("card_interactive_controls", "Mostrar controles ao interagir"),
         ):
             self.option(key, label)
         self.option("persistent", "Interação persistente", False)

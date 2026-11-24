@@ -25,6 +25,8 @@ Capturas da demo original, com dados fictícios. Consulte a [matriz de verifica�
 
 ![Stories e cartão passivo](docs/screenshots/stories.png)
 
+[Stories em fundo claro](docs/screenshots/stories-claro.png)
+
 ![Miniplayer interativo](docs/screenshots/miniplayer.png)
 
 ![Central de configurações](docs/screenshots/central.png)

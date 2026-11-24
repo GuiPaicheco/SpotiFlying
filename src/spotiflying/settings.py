@@ -20,7 +20,7 @@ STORIES = {
     "phrase_progress": False,
     "card_width": 240, "card_height": 56, "cover": 40, "card_opacity": 100, "card_radius": 13,
     "card_padding": 8, "card_spacing": 8, "card_border": 1, "card_shadow": False,
-    "card_align": "Esquerda", "card_layout": "Horizontal",
+    "card_align": "Esquerda", "card_layout": "Horizontal", "card_interactive_controls": True,
     "card_items": ["Capa", "Título", "Artista"], "item_order": ITEMS,
     "autohide": "Nunca",
 }
@@ -195,6 +195,8 @@ class Settings:
             except (OSError, ValueError):
                 previous = None
             if previous:
+                if not self.data["history"]:
+                    previous["history"] = []
                 atomic_json(self.backup, previous)
         atomic_json(self.path, self.data)
 

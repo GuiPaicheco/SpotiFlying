@@ -25,6 +25,27 @@ Para criar evidências no Windows, execute `SpotiFlying.exe --capture caminho`. 
 
 ## Matriz de verificação
 
-O ambiente disponível é Windows 10 Pro 22H2 x64, build 19045. Os testes de parser, matching, catálogo simulado, relógio, geometria e configurações rodam com `pytest`. A demo e o provedor local também podem ser exercitados na máquina Windows.
+O ambiente local foi Windows 10 Pro 22H2 x64, build 19045, Intel Core i3-6100T, quatro processadores lógicos e 8 GiB de RAM. O pipeline usa Windows Server 2022 x64.
 
-Validações que dependem de hardware ou aplicativos externos devem ser registradas com a máquina, a escala e o método. O smoke automatizado inspeciona a transparência Qt, estilos dos HWNDs e comportamento da demo. O teste entre processos usa um editor Qt independente e registra cliques e rolagem. Ele deve ser executado no desktop interativo. A matriz de validação não atribui os resultados do smoke ao Windows Sandbox, Windows 11, ambientes de jogo ou monitores que não foram exercitados.
+| Cenário | Evidência |
+| --- | --- |
+| Parser, matching, catálogo simulado, relógio, configuração e geometria | 12 testes automatizados |
+| Demo e janelas | Smoke de transparência, HWND, bandeja, pausa, seek e troca de faixa. Testes com escala Qt 100%, 125% e 150% |
+| Spotify Desktop real | Sessão `Spotify.exe` em reprodução com posição, duração e capa recebidas pelo aplicativo compilado |
+| Entrada em outro processo | Em um editor Qt independente, três eventos de clique passaram por glifo, área vazia e cartão passivo. Uma rolagem também chegou ao editor |
+| Aparência | Capturas do executável com dados fictícios, em fundo escuro e claro, no cartão interativo e na central |
+| Matriz física pendente | Windows 11, máquina limpa de cliente, jogo em janela sem bordas, desconexão física de monitor e sessão Spotify sob suspensão ou reconexão |
+
+Para repetir o teste de entrada no desktop interativo, execute `python tests/windows_input_check.py release/clickthrough.json`. Ele abre um editor descartável em outro processo e envia os eventos somente quando o Windows identifica esse processo sob o ponteiro.
+
+### CPU e memória
+
+Medição do processo executado a partir do código-fonte com a demo local. Foram observados 10 segundos por fase, CPU como percentual de um núcleo lógico, e conjunto de trabalho ao final da fase. O comando foi `python tests/windows_performance.py release/performance.json`.
+
+| Fase | CPU média de um núcleo | Memória |
+| --- | ---: | ---: |
+| Pausado | 0,0% | 80,44 MiB |
+| Reproduzindo com sobreposições visíveis | 2,5% | 80,72 MiB |
+| Reproduzindo com sobreposições ocultas | 0,0% | 80,95 MiB |
+
+Para o teste de 30 minutos com troca automática de faixa e sobreposições ocultas, execute `python tests/windows_performance.py release/endurance.json --endurance`. O relatório registra o conjunto de trabalho e a contagem de trocas a cada minuto.

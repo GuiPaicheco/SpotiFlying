@@ -149,7 +149,8 @@ class Controller(QObject, Content, Desktop):
                     width, height = round(area.width() * width / 100), round(area.height() * height / 100)
                 size = QSize(max(110, width), max(44, height))
             else:
-                controls = 74 if self.interaction else 29 if "Controles" in visual["card_items"] else 0
+                controls = (74 if visual["card_interactive_controls"] else 24) if self.interaction else (
+                    29 if "Controles" in visual["card_items"] else 0)
                 size = QSize(visual["card_width"], visual["card_height"] + controls)
             window.setGeometry(geometry(area, size, placement, window.kind))
 

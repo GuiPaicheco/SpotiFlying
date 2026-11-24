@@ -409,20 +409,21 @@ class CardOverlay(Overlay):
 
     def layout_controls(self):
         interactive = self.state == "interactive"
+        show_controls = interactive and self.visual["card_interactive_controls"]
         explicit = self.state == "passive" and "Controles" in self.visual["card_items"]
         self.interactive.setVisible(interactive)
-        self.interactive.setGeometry(9, max(0, self.height() - 72), self.width() - 18, 12)
+        self.interactive.setGeometry(9, max(0, self.height() - (72 if show_controls else 22)), self.width() - 18, 12)
         controls = self.snapshot.capabilities if self.snapshot and interactive else ()
         width = max(19, (self.width() - 29) // 5)
         for i, (name, button) in enumerate(self.buttons.items()):
             actual = "pause" if name == "play" and self.snapshot and self.snapshot.timeline.playing else name
-            button.setVisible(interactive or explicit)
+            button.setVisible(show_controls or explicit)
             button.setGeometry(8 + i * (width + 3), self.height() - 29, width, 22)
             button.setEnabled(actual in controls)
             button.setToolTip(button.accessibleName() if actual in controls else "Comando indisponível nesta sessão")
             if name == "play":
                 button.setText("Ⅱ" if actual == "pause" else "▶")
-        self.slider.setVisible(interactive)
+        self.slider.setVisible(show_controls)
         self.slider.setGeometry(8, self.height() - 57, self.width() - 16, 20)
         duration = self.snapshot.timeline.duration if self.snapshot else 0
         self.slider.setRange(0, duration)
@@ -464,7 +465,9 @@ class CardOverlay(Overlay):
         padding, spacing = visual["card_padding"], visual["card_spacing"]
         selected = set(visual["card_items"])
         ordered = [item for item in visual["item_order"] if item in selected and item != "Controles"]
-        content_h = self.height() - (75 if self.state == "interactive" else 30 if "Controles" in selected else 0)
+        controls = (74 if visual["card_interactive_controls"] else 24) if self.state == "interactive" else (
+            29 if "Controles" in selected else 0)
+        content_h = self.height() - controls
         x, y = padding, padding
         painter.setClipRect(1, 1, self.width() - 2, max(1, content_h - 2))
         vertical = visual["card_layout"] == "Vertical"

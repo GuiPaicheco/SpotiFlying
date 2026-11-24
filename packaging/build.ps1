@@ -31,6 +31,8 @@ $pyinstallerArgs = @(
 )
 & $Python -m PyInstaller @pyinstallerArgs
 Assert-Exit
+& $Python packaging/prepare_runtime.py
+Assert-Exit
 & $Python packaging/dependency_notices.py
 Assert-Exit
 Copy-Item -LiteralPath LICENSE, THIRD_PARTY_NOTICES.md -Destination dist/SpotiFlying
