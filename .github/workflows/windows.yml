@@ -1,0 +1,84 @@
+name: Windows x64
+on:
+  push:
+    branches: [main, 'codex/**']
+    tags: [v1.0.0]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.10'
+          architecture: x64
+      - name: Install locked dependencies
+        run: python -m pip install -r requirements-lock.txt
+      - name: Audit locked dependencies
+        run: python -m pip_audit -r requirements-lock.txt --no-deps
+      - name: Install Inno Setup 6.7.3
+        shell: pwsh
+        run: |
+          $setup = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
+          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe' -OutFile $setup
+          if ((Get-FileHash -LiteralPath $setup).Hash -ne '9c73c3bae7ed48d44112a0f48e66742c00090bdb5bef71d9d3c056c66e97b732') {
+            throw 'Inno Setup checksum mismatch.'
+          }
+          $process = Start-Process -FilePath $setup -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/CURRENTUSER') -PassThru -Wait
+          if ($process.ExitCode -ne 0) { throw 'Inno Setup installation failed.' }
+      - name: Check and package
+        shell: pwsh
+        run: ./packaging/build.ps1 -Python python
+      - name: Check extracted ZIP
+        shell: pwsh
+        run: |
+          Expand-Archive release/SpotiFlying-Portable-x64.zip portable
+          $process = Start-Process portable/SpotiFlying/SpotiFlying.exe -ArgumentList @('--smoke', 'release/smoke-zip') -PassThru -Wait
+          if ($process.ExitCode -ne 0) { throw 'Portable startup failed.' }
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: SpotiFlying-Windows-x64
+          path: |
+            release/SpotiFlying-Setup-x64.exe
+            release/SpotiFlying-Portable-x64.zip
+            release/SHA256SUMS.txt
+            release/smoke-frozen/smoke.json
+            release/smoke-zip/smoke.json
+          if-no-files-found: error
+  publish:
+    if: github.repository == 'GuiPaicheco/SpotiFlying' && github.ref == 'refs/tags/v1.0.0'
+    needs: build
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: SpotiFlying-Windows-x64
+          path: assets
+      - name: Publish and verify downloads
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = 'v1.0.0'
+          gh release create $tag --verify-tag --title "SpotiFlying $tag" --notes-file packaging/RELEASE_NOTES.md assets/SpotiFlying-Setup-x64.exe assets/SpotiFlying-Portable-x64.zip assets/SHA256SUMS.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }
+          gh release download $tag --dir downloaded
+          if ($LASTEXITCODE -ne 0) { throw 'Release download failed.' }
+          if ((Get-FileHash downloaded/SHA256SUMS.txt).Hash -ne (Get-FileHash assets/SHA256SUMS.txt).Hash) {
+            throw 'Manifest checksum mismatch.'
+          }
+          foreach ($line in Get-Content -LiteralPath downloaded/SHA256SUMS.txt) {
+            $hash, $name = $line -split '  ', 2
+            if ((Get-FileHash -LiteralPath (Join-Path downloaded $name)).Hash -ne $hash) {
+              throw "Checksum mismatch for $name"
+            }
+          }
