@@ -8,9 +8,9 @@ Letras sincronizadas sobre o desktop e um cartão independente para a faixa atua
 
 Veja os downloads em [Releases](https://github.com/GuiPaicheco/SpotiFlying/releases). Os arquivos locais gerados pelo build ficam em `release/`.
 
-- **Instalador** · Execute `SpotiFlying-Setup-x64.exe`. A instalação é por usuário em `%LOCALAPPDATA%\Programs\SpotiFlying`. Remova pelo painel Aplicativos do Windows.
-- **Portátil** · Extraia `SpotiFlying-Portable-x64.zip` por completo. Abra `SpotiFlying.exe` na pasta extraída. Mantenha a pasta de dependências junto ao executável.
-- **Integridade** · Use `Get-FileHash -Algorithm SHA256` no arquivo baixado e compare com `SHA256SUMS.txt`. Builds sem assinatura podem acionar o SmartScreen.
+- **Instalador** · Execute o instalador para instalar por usuário em `%LOCALAPPDATA%\Programs\SpotiFlying`. Remova pelo painel Aplicativos do Windows. [Baixar instalador x64](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SpotiFlying-Setup-x64.exe)
+- **Portátil** · Extraia o ZIP por completo. Abra `SpotiFlying.exe` na pasta extraída e mantenha as dependências junto ao executável. [Baixar ZIP x64](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SpotiFlying-Portable-x64.zip)
+- **Integridade** · Use `Get-FileHash -Algorithm SHA256` no arquivo baixado e compare com o manifesto. Builds sem assinatura podem acionar o SmartScreen. [Baixar manifesto SHA-256](https://github.com/GuiPaicheco/SpotiFlying/releases/download/v1.0.0/SHA256SUMS.txt)
 
 ## Primeiros passos
 
@@ -21,7 +21,7 @@ Veja os downloads em [Releases](https://github.com/GuiPaicheco/SpotiFlying/relea
 
 ## Capturas
 
-Capturas da demo original, com dados fictícios. Consulte a [matriz de verificação](docs/TECHNICAL.md).
+Capturas do executável publicado em v1.0.0, com dados fictícios. Consulte a [matriz de verificação](docs/TECHNICAL.md).
 
 ![Stories e cartão passivo](docs/screenshots/stories.png)
 
