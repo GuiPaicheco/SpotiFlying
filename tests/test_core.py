@@ -63,13 +63,14 @@ def test_catalog_exact_and_ambiguous_fallback():
 
 
 @pytest.mark.parametrize("failure,delay", [(HTTPError("", 429, "", {"Retry-After": "65"}, None), 65),
+                                            (HTTPError("", 429, "", {"Retry-After": "170"}, None), 170),
                                             (HTTPError("", 503, "", {}, None), 15),
                                             (TimeoutError(), 15), (ValueError(), 15)])
 def test_catalog_failures(failure, delay):
     def transport(*_):
         raise failure
 
-    provider = LyricsProvider(transport, lambda: 11)
+    provider = LyricsProvider(transport, lambda: 11, lambda low, high: 0)
     with pytest.raises(CatalogError):
         provider.lookup(Track("Mar", "Lía"), lambda: False)
     assert provider.retry_at == 11 + delay

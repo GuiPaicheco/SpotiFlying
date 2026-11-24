@@ -12,6 +12,7 @@ ITEMS = ["Capa", "Título", "Artista", "Álbum", "Progresso", "Tempo atual", "Te
 STORIES = {
     "font": "Segoe UI", "size": 38, "weight": 900, "uppercase": True, "italic": False,
     "tracking": 0, "spacing": -3, "emphasis": 1.75, "shadow": True, "outline": 0, "color": "#ffffff",
+    "active_scale": 1.0, "context_scale": .63,
     "secondary": "#b1d6cf", "gradient": False, "art_tint": False, "opacity": 100,
     "background": "#182421", "background_alpha": 0, "border": 0, "padding": 0,
     "width": 32, "height": 50, "units": "Percentual", "x_align": "Esquerda", "y_align": "Topo",
@@ -47,7 +48,8 @@ PROFILE = ("preset", "visual", "presets", "theme", "lyrics_visible", "card_visib
            "group", "monitor", "lyrics_position", "card_position", "fps", "reduced_motion", "economy", "offset")
 RANGES = {
     "size": (9, 145), "weight": (100, 900), "tracking": (-5, 24), "spacing": (-16, 45),
-    "emphasis": (1, 2.5), "outline": (0, 8), "opacity": (10, 100), "background_alpha": (0, 100),
+    "emphasis": (1, 2.5), "active_scale": (.5, 1.5), "context_scale": (.35, 1.5),
+    "outline": (0, 8), "opacity": (10, 100), "background_alpha": (0, 100),
     "border": (0, 8), "padding": (0, 60), "width": (10, 2400), "height": (10, 1800),
     "lines": (1, 12), "previous": (0, 11), "motion_ms": (0, 900), "intensity": (0, 40),
     "card_width": (110, 800), "card_height": (44, 480), "cover": (16, 180),
@@ -66,7 +68,7 @@ CHOICES = {
 
 
 def bounded(value, default, key):
-    if key == "emphasis" and type(value) in (int, float):
+    if type(default) is float and type(value) in (int, float):
         value = float(value)
     if type(value) is not type(default):
         return deepcopy(default)

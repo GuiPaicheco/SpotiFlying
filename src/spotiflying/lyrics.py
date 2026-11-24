@@ -1,10 +1,13 @@
 """Timed text parsing, track identification, and the optional catalog."""
 import json
+import random
 import re
 import time
 import unicodedata
 from bisect import bisect_right
 from dataclasses import dataclass
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -135,10 +138,24 @@ class CatalogError(Exception):
     pass
 
 
+def retry_delay(header):
+    if not header:
+        return 30
+    try:
+        return max(1, min(2_147_483_647, int(header)))
+    except ValueError:
+        try:
+            deadline = parsedate_to_datetime(header)
+            return max(1, (deadline - datetime.now(timezone.utc)).total_seconds())
+        except (ValueError, TypeError, OverflowError):
+            return 30
+
+
 class LyricsProvider:
-    def __init__(self, transport=None, clock=time.monotonic):
+    def __init__(self, transport=None, clock=time.monotonic, jitter=random.uniform):
         self.transport = transport or self.request
         self.clock = clock
+        self.jitter = jitter
         self.retry_at = 0
 
     @staticmethod
@@ -188,12 +205,17 @@ class LyricsProvider:
         except HTTPError as error:
             delay = 15
             if error.code == 429:
-                try:
-                    delay = max(1, min(120, int(error.headers.get("Retry-After", "30"))))
-                except ValueError:
-                    delay = 30
+                delay = retry_delay(error.headers.get("Retry-After") if error.headers else None)
+                delay += self.jitter(0, min(10, delay * .2))
             self.retry_at = self.clock() + delay
             raise CatalogError(f"Catálogo indisponível (HTTP {error.code}).") from error
-        except (OSError, URLError, ValueError) as error:
+        except (TimeoutError, URLError) as error:
             self.retry_at = self.clock() + 15
-            raise CatalogError("Falha de rede ou resposta inválida do catálogo.") from error
+            timed_out = isinstance(error, TimeoutError) or isinstance(getattr(error, "reason", None), TimeoutError)
+            raise CatalogError("O catálogo demorou para responder." if timed_out else "Catálogo inacessível.") from error
+        except ValueError as error:
+            self.retry_at = self.clock() + 15
+            raise CatalogError("O catálogo retornou uma resposta inválida.") from error
+        except OSError as error:
+            self.retry_at = self.clock() + 15
+            raise CatalogError("Falha de rede ao consultar o catálogo.") from error

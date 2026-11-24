@@ -14,7 +14,7 @@ from pathlib import Path
 from time import monotonic
 
 from PySide6.QtCore import QObject, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QFontDatabase, QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon
 
@@ -48,6 +48,8 @@ class Controller(QObject, Content, Desktop):
         self.log.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
         logging.getLogger("spotiflying").addHandler(self.log)
         logging.getLogger("spotiflying").setLevel(logging.INFO)
+        for font in ASSETS.glob("BarlowCondensed-*.ttf"):
+            QFontDatabase.addApplicationFont(str(font))
         self.icon = QIcon(str(ASSETS / "spotiflying.ico"))
         qt.setWindowIcon(self.icon)
         self.snapshot = self.last_spotify = None
@@ -56,6 +58,7 @@ class Controller(QObject, Content, Desktop):
         self.candidates = []
         self.cache, self.choices = OrderedDict(), OrderedDict()
         self.generation = 0
+        self.catalog_failures = 0
         self.provider_status = self.error = ""
         self.demo = self.demo_repeat = self.demo_shuffle = False
         self.demo_index = 0

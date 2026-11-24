@@ -179,7 +179,6 @@ class LyricOverlay(Overlay):
         key = (text, scale, active, width, self.manual)
         if key in self.cache:
             return self.cache[key]
-        text = text.upper() if visual["uppercase"] else text
         emphatic = emphasis_range(text, self.manual) if active and visual["emphasis"] > 1 else (-1, -1)
         regular = font_for(visual, scale)
         larger = font_for(visual, scale * visual["emphasis"])
@@ -192,7 +191,7 @@ class LyricOverlay(Overlay):
             words = list(re.finditer(r"\S+", line))
             for word in words:
                 special = word.start() < emphatic[1] and word.end() > emphatic[0] and len(text.splitlines()) == 1
-                value = word[0]
+                value = word[0].upper() if visual["uppercase"] else word[0]
                 measure = metrics[special]
                 if measure.horizontalAdvance(value) > width:
                     value = measure.elidedText(value, Qt.TextElideMode.ElideRight, max(1, int(width)))
@@ -201,6 +200,8 @@ class LyricOverlay(Overlay):
                     if not visual["wrap"]:
                         offset, *_ = row[-1]
                         remaining = line[row[-1][-1]:]
+                        if visual["uppercase"]:
+                            remaining = remaining.upper()
                         clipped = metrics[False].elidedText(remaining, Qt.TextElideMode.ElideRight,
                                                            max(1, int(width - offset)))
                         row[-1] = (offset, clipped, regular, metrics[False], row[-1][-1])
@@ -238,8 +239,8 @@ class LyricOverlay(Overlay):
         base = min(1.0, max(.52, width / max(335, visual["size"] * 6)))
         rows = []
         for factor in (1, .88, .74, .6, .48):
-            rows = [(row, cue, active) for cue, active in cues
-                    for row in self.typeset(cue.text, base * factor * (1 if active else .63), active, width)]
+            rows = [(row, cue, active) for cue, active in cues for row in self.typeset(
+                cue.text, base * factor * visual["active_scale" if active else "context_scale"], active, width)]
             if sum(row[0] for row, _, _ in rows) <= height:
                 break
         total = sum(row[0] for row, _, _ in rows)

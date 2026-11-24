@@ -29,7 +29,7 @@ O ambiente local foi Windows 10 Pro 22H2 x64, build 19045, Intel Core i3-6100T, 
 
 | Cenário | Evidência |
 | --- | --- |
-| Parser, matching, catálogo simulado, relógio, configuração e geometria | 12 testes automatizados |
+| Parser, matching, catálogo simulado, relógio, configuração e geometria | 13 testes automatizados |
 | Demo e janelas | Smoke de transparência, HWND, bandeja, pausa, seek e troca de faixa. Testes com escala Qt 100%, 125% e 150% |
 | Spotify Desktop real | Sessão `Spotify.exe` em reprodução com posição, duração e capa recebidas pelo aplicativo compilado |
 | Entrada em outro processo | Em um editor Qt independente, três eventos de clique passaram por glifo, área vazia e cartão passivo. Uma rolagem também chegou ao editor |

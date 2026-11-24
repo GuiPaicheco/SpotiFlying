@@ -187,7 +187,7 @@ class SettingsWindow(QMainWindow):
             if key == "offset":
                 widget.setSingleStep(50)
                 widget.setSuffix(" ms")
-            if key == "emphasis":
+            if isinstance(value, float):
                 widget.setSingleStep(.05)
             signal, assign, convert = widget.valueChanged, widget.setValue, type(value)
         else:
@@ -217,7 +217,8 @@ class SettingsWindow(QMainWindow):
         for key, label in (
             ("font", "Fonte"), ("size", "Tamanho (DIP)"), ("weight", "Peso"), ("italic", "Itálico"),
             ("uppercase", "Caixa alta"), ("tracking", "Espaço entre letras"), ("spacing", "Entrelinhas"),
-            ("emphasis", "Escala da ênfase"), ("opacity", "Opacidade (%)"), ("gradient", "Gradiente"),
+            ("emphasis", "Escala da ênfase"), ("active_scale", "Escala da frase atual"),
+            ("context_scale", "Escala das outras frases"), ("opacity", "Opacidade (%)"), ("gradient", "Gradiente"),
             ("art_tint", "Tonalidade da capa"), ("shadow", "Sombra curta"), ("outline", "Contorno do texto"),
             ("background_alpha", "Opacidade do fundo (%)"), ("border", "Borda"), ("padding", "Padding"),
         ):

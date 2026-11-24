@@ -96,11 +96,13 @@ class Content:
 
     def reload_lyrics(self, preserve=False):
         self.generation += 1
+        self.retry_timer.stop()
         generation = self.generation
         self.candidates = []
         self.error = ""
         track = self.snapshot.track if self.snapshot else None
         if not preserve:
+            self.catalog_failures = 0
             self.lyrics = Lyrics("missing")
             self.lyric_window.show_cues([], 0, 0, True, "")
         if not track:
@@ -152,9 +154,13 @@ class Content:
         self.error = error
         self.jump = True
         if not error:
+            self.catalog_failures = 0
             self.remember(self.cache, self.snapshot.track.key, lyrics, candidates)
         else:
-            self.retry_timer.start(max(1000, round((self.catalog.retry_at - monotonic()) * 1000)))
+            self.catalog_failures += 1
+            if self.catalog_failures < 4:
+                delay = self.catalog.retry_at - monotonic()
+                self.retry_timer.start(round(max(1, min(2_000_000, delay)) * 1000))
         self.tick()
 
     @staticmethod

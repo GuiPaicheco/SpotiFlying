@@ -27,3 +27,4 @@ else:
 for entry in Path("packaging/licenses").glob("*.txt"):
     if entry.name != "Python.txt":
         shutil.copyfile(entry, root / entry.name)
+shutil.copyfile("src/spotiflying/assets/BarlowCondensed-OFL.txt", root / "BarlowCondensed-OFL.txt")
