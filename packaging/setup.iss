@@ -1,9 +1,14 @@
+#define Publisher "Guilherme Paicheco Ferreira"
+
 [Setup]
 AppId=SpotiFlying.GuiPaicheco.Desktop
 AppName=SpotiFlying
 AppVersion=1.0.1
-AppPublisher=SpotiFlying
-AppPublisherURL=https://github.com/GuiPaicheco/SpotiFlying
+AppPublisher={#Publisher}
+AppPublisherURL=https://guipaicheco.github.io/SpotiFlying/
+AppSupportURL=https://github.com/GuiPaicheco/SpotiFlying/issues
+AppUpdatesURL=https://github.com/GuiPaicheco/SpotiFlying/releases
+VersionInfoDescription=Instalador do SpotiFlying
 VersionInfoVersion=1.0.1
 DefaultDirName={localappdata}\Programs\SpotiFlying
 DefaultGroupName=SpotiFlying
@@ -28,8 +33,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
 [Files]
 Source: "..\dist\SpotiFlying\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 [Icons]
-Name: "{group}\SpotiFlying"; Filename: "{app}\SpotiFlying.exe"
-Name: "{autodesktop}\SpotiFlying"; Filename: "{app}\SpotiFlying.exe"; Tasks: desktopicon
+Name: "{group}\SpotiFlying"; Filename: "{app}\SpotiFlying.exe"; Comment: "Desenvolvido por {#Publisher}"
+Name: "{autodesktop}\SpotiFlying"; Filename: "{app}\SpotiFlying.exe"; Comment: "Desenvolvido por {#Publisher}"; Tasks: desktopicon
 [Registry]
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: none; ValueName: "SpotiFlying"; Flags: dontcreatekey uninsdeletevalue
 [Run]

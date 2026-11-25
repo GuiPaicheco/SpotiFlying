@@ -23,7 +23,7 @@ from .content import Content
 from .desktop import Desktop
 from .lyrics import Lyrics, LyricsProvider
 from .overlay import CardOverlay, LyricOverlay, active_screen, geometry
-from .platform import Hotkeys, startup
+from .platform import STORE_EDITION, Hotkeys, startup
 from .playback import PlaybackProvider
 from .settings import DEFAULT, PRESETS, STORIES, Settings, visual_settings
 from .sync import Playhead
@@ -434,7 +434,7 @@ def main():
     options = parser.parse_args()
     if options.smoke or options.capture:
         options.demo = True
-    if sys.platform == "win32":
+    if sys.platform == "win32" and not STORE_EDITION:
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("GuiPaicheco.SpotiFlying.Desktop")
     qt = QApplication([sys.argv[0]])
     qt.setApplicationName("SpotiFlying")

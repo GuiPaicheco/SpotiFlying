@@ -179,6 +179,11 @@ kbd { font: inherit; color: var(--text); white-space: nowrap; }
 .text-link:hover { color: var(--text); }
 .footer { padding-block: 1.4rem 2rem; border-top: 1px solid var(--line); font-size: .9rem; }
 .footer p a { color: var(--text); text-underline-offset: .2em; }
+.policy { max-width: 48rem; padding-block: clamp(2.5rem, 8vw, 5rem); }
+.policy h1 { font-size: clamp(3rem, 7vw, 5rem); }
+.policy h2 { margin-top: 2rem; font-size: clamp(2rem, 5vw, 3rem); }
+.policy p { max-width: 67ch; margin-top: 1rem; color: var(--muted); }
+.policy a { color: var(--accent); }
 
 @media (max-width: 54rem) {
   .hero { grid-template-columns: 1fr; }

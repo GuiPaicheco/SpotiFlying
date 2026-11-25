@@ -23,6 +23,16 @@ Instale o compilador Inno Setup 6.7.3. Se estiver em pasta personalizada, passe 
 
 Para criar evidências no Windows, execute `SpotiFlying.exe --capture caminho`. O modo abre um fundo ilustrado da própria demo. O smoke do Spotify real usa `SpotiFlying.exe --probe caminho` com uma sessão Desktop em reprodução. O relatório registra presença de metadados e estado, sem título ou artista.
 
+### Microsoft Store
+
+O empacotador usa a pasta `dist/SpotiFlying` preparada pelo build Windows x64 e o MakeAppx do Windows SDK. Informe os três valores exatos de **Identidade do produto** no Partner Center.
+
+```powershell
+.venv\Scripts\python.exe packaging/msix.py --makeappx 'caminho\MakeAppx.exe' --identity-name '<Name>' --publisher '<Publisher>' --publisher-display-name '<PublisherDisplayName>'
+```
+
+O resultado é `release/SpotiFlying-x64.msixupload`, destinado ao Partner Center. A Store assina o pacote após a certificação e entrega as atualizações. A edição MSIX omite a opção de inicialização via registro usada pelas edições Win32.
+
 ## Matriz de verificação
 
 O ambiente local foi Windows 10 Pro 22H2 x64, build 19045, Intel Core i3-6100T, quatro processadores lógicos e 8 GiB de RAM. O pipeline usa Windows Server 2022 x64.

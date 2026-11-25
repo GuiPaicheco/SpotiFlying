@@ -10,6 +10,7 @@ from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QSystemTrayIcon
 
 from . import __version__
+from .platform import STORE_EDITION
 from .settings import PRESETS
 
 REPOSITORY = "https://github.com/GuiPaicheco/SpotiFlying"
@@ -68,10 +69,11 @@ class Desktop:
         self.menu.addSeparator()
         self.menu.addAction("Personalizar", lambda: self.open_settings("Aparência"))
         self.menu.addAction("Atalhos", lambda: self.open_settings("Atalhos"))
-        startup_action = self.menu.addAction("Iniciar com o Windows")
-        startup_action.setCheckable(True)
-        startup_action.setChecked(self.data["startup"])
-        startup_action.toggled.connect(lambda value: self.change("startup", value, False))
+        if not STORE_EDITION:
+            startup_action = self.menu.addAction("Iniciar com o Windows")
+            startup_action.setCheckable(True)
+            startup_action.setChecked(self.data["startup"])
+            startup_action.toggled.connect(lambda value: self.change("startup", value, False))
         self.menu.addAction("Verificar atualizações", self.updates)
         self.menu.addAction("Exportar diagnóstico", self.export_diagnostic)
         self.menu.addAction("Sair", self.qt.quit)
@@ -134,6 +136,9 @@ class Desktop:
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.store.root)))
 
     def updates(self):
+        if STORE_EDITION:
+            self.notify("Esta edição recebe atualizações pela Microsoft Store.")
+            return
         self.notify("Consultando a Release no GitHub…")
         self.executor.submit(self.fetch_update)
 

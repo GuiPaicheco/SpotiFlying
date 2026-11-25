@@ -2,11 +2,13 @@
 import ctypes
 import sys
 from ctypes import wintypes
+from pathlib import Path
 
 from PySide6.QtCore import QAbstractNativeEventFilter, QSettings
 from PySide6.QtGui import QKeySequence
 
 WINDOWS = sys.platform == "win32"
+STORE_EDITION = getattr(sys, "frozen", False) and (Path(sys.executable).parent / "store.flag").is_file()
 if WINDOWS:
     user32 = ctypes.WinDLL("user32", use_last_error=True)
     user32.GetWindowLongPtrW.argtypes = [wintypes.HWND, ctypes.c_int]

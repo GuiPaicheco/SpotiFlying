@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
     QScrollArea, QSpinBox, QStackedWidget, QTextEdit, QVBoxLayout, QWidget,
 )
 
+from .platform import STORE_EDITION
 from .settings import CHOICES, RANGES
 
 
@@ -286,7 +287,8 @@ class SettingsWindow(QMainWindow):
         self.button("Iniciar demo offline", lambda: self.app.set_demo(True))
         for mark, name in (("Anterior", "previous"), ("Reproduzir / pausar", "toggle"), ("Próxima", "next")):
             self.button(mark, lambda checked=False, name=name: self.app.command(name))
-        self.option("startup", "Iniciar com o Windows", False)
+        if not STORE_EDITION:
+            self.option("startup", "Iniciar com o Windows", False)
 
     def position(self):
         self.page("Posicionamento", "Mova as caixas pela área de edição e redimensione pelo canto.")
