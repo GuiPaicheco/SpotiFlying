@@ -22,7 +22,8 @@ Assert-Exit
 & $Python -m pytest -q
 Assert-Exit
 $pyinstallerArgs = @(
-    '--noconfirm', '--onedir', '--windowed', '--name', 'SpotiFlying', '--paths', 'src',
+    # PyInstaller can reuse the executable when only the icon's contents change.
+    '--clean', '--noconfirm', '--onedir', '--windowed', '--name', 'SpotiFlying', '--paths', 'src',
     '--icon', 'src/spotiflying/assets/spotiflying.ico', '--version-file', 'packaging/version.txt',
     '--add-data', 'src/spotiflying/assets:spotiflying/assets',
     '--hidden-import', 'winrt.windows.foundation', '--hidden-import', 'winrt.windows.foundation.collections',

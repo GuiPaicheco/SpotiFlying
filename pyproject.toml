@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "spotiflying"
 version = "1.0.1"
 description = "Sobreposição de letras sincronizadas para Windows"
+authors = [{name = "Guilherme Paicheco Ferreira"}]
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "PySide6==6.10.2",
@@ -15,6 +16,9 @@ dependencies = [
     "winrt-Windows.Media.Control==3.2.1; sys_platform == 'win32'",
     "winrt-Windows.Storage.Streams==3.2.1; sys_platform == 'win32'",
 ]
+
+[project.urls]
+"GitHub do autor" = "https://github.com/GuiPaicheco"
 
 [project.gui-scripts]
 spotiflying = "spotiflying.app:main"

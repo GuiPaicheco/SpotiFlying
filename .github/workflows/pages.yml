@@ -1,0 +1,49 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pages.yml'
+      - 'docs/site/**'
+      - 'docs/screenshots/**'
+      - 'src/spotiflying/assets/spotiflying.svg'
+      - 'src/spotiflying/assets/BarlowCondensed-Black.ttf'
+      - 'src/spotiflying/assets/BarlowCondensed-OFL.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Assemble static site
+        run: |
+          mkdir -p _site/assets
+          cp docs/site/index.html docs/site/site.css _site/
+          cp -r docs/screenshots _site/
+          cp src/spotiflying/assets/{spotiflying.svg,BarlowCondensed-Black.ttf,BarlowCondensed-OFL.txt} _site/assets/
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: _site
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

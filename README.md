@@ -4,6 +4,8 @@
 
 Letras sincronizadas sobre o desktop e um cartão independente para a faixa atual. Aplicativo Windows x64 independente do Spotify.
 
+[Visite o site do SpotiFlying](https://guipaicheco.github.io/SpotiFlying/) para conhecer os recursos e baixar o aplicativo.
+
 ## Instalação
 
 Veja os downloads em [Releases](https://github.com/GuiPaicheco/SpotiFlying/releases). Os arquivos locais gerados pelo build ficam em `release/`.
@@ -43,4 +45,8 @@ A demo, as configurações, o diagnóstico e a importação de letras são locai
 - [Contribuição](CONTRIBUTING.md)
 - [Histórico de versões](CHANGELOG.md)
 
-Código do projeto sob [MIT](LICENSE). Confira componentes e créditos em [avisos de terceiros](THIRD_PARTY_NOTICES.md).
+## Créditos
+
+SpotiFlying foi desenvolvido por [Guilherme Paicheco Ferreira](https://github.com/GuiPaicheco).
+
+Código do projeto sob [MIT](LICENSE). Consulte os [avisos de terceiros](THIRD_PARTY_NOTICES.md).

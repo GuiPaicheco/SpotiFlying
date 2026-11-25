@@ -347,6 +347,14 @@ class SettingsWindow(QMainWindow):
 
     def about(self):
         self.page("Sobre", "Aplicativo independente para Windows. A demonstração usa faixas fictícias.")
+        author = QLabel(
+            'Desenvolvido por <a href="https://github.com/GuiPaicheco">Guilherme Paicheco Ferreira</a>.',
+            wordWrap=True,
+        )
+        author.setTextFormat(Qt.TextFormat.RichText)
+        author.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        author.setOpenExternalLinks(True)
+        self.row("", author)
         self.location = QLabel(wordWrap=True, objectName="muted")
         self.location.setTextFormat(Qt.TextFormat.PlainText)
         self.row("", self.location)

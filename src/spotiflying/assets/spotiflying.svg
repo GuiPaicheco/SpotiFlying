@@ -1,6 +1,17 @@
 <svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-  <rect x="8" y="8" width="240" height="240" rx="51" fill="#152623"/>
-  <rect x="12" y="12" width="232" height="232" rx="47" fill="none" stroke="#386158" stroke-width="5"/>
-  <path d="M42 154c21-40 46-54 68-29 18 20 40 28 60 7 14-14 26-25 45-23" fill="none" stroke="#70e6cf" stroke-width="15" stroke-linecap="round"/>
-  <path d="M145 81v80c0 18-14 31-33 31-15 0-26-8-26-21 0-15 15-25 30-25 5 0 10 1 14 3V75c0-4 3-8 7-9l55-13v16z" fill="#f1fffb"/>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#244c4a"/>
+      <stop offset="1" stop-color="#10242e"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" y1="1" x2="1" y2="0">
+      <stop stop-color="#79e9d7"/>
+      <stop offset="1" stop-color="#edffbd"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="57" fill="url(#tile)"/>
+  <rect x="10" y="10" width="236" height="236" rx="55" fill="none" stroke="#609791" stroke-width="4"/>
+  <path fill="url(#wing)" d="M61 109h36q10 0 17-7l55-51q5-5 10-2t3 10l-24 48q-11 22-35 22H61a10 10 0 0 1 0-20Z"/>
+  <path fill="#a3f1d0" d="M80 144h56q15 0 25-10l29-29q5-5 10-2t3 10l-23 35q-10 16-30 16H80a10 10 0 0 1 0-20Z"/>
+  <path fill="#79e9d7" d="M103 179h53q11 0 19-7l14-13q4-4 8-1t1 8l-17 22q-9 11-23 11h-55a10 10 0 0 1 0-20Z"/>
 </svg>
