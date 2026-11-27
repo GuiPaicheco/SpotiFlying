@@ -42,6 +42,9 @@ def test_versions_and_ambiguity():
     correct = row("MARÉS", "Cartas", 20)
     assert normalize("  Ａ ç–b  ") == "a ç b"
     assert select(track, [row("Marés (Live)", "Cartas", 20), row("Marés", "Cartas Remix", 20), correct]) == correct
+    accented = row("Marès", "Cartas", 20)
+    assert select(track, [accented, row("Marés", "Outro álbum", 20)]) == accented
+    assert select(track, [row("Marès (Ao Vivo)", "Cartas", 20), row("Marès", "Cartas", 24)]) is None
     assert select(track, [row("Marés", "Cartas", 24)]) is None
     assert select(track, [row("Marés", "Cartas", 20), row("Marés", "Cartas", 20.1)]) is None
     assert select(Track("Marés", "Lía", "Cartas"), [correct]) is None

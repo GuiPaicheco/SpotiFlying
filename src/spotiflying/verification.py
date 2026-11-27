@@ -51,6 +51,8 @@ def run_verification(app, options):
                 "state": snapshot.state if snapshot else "", "provider_status": app.provider_status})
 
     def smoke():
+        import ssl
+
         from .platform import user32
 
         glyph = app.lyric_window.grab().toImage()
@@ -69,7 +71,13 @@ def run_verification(app, options):
         mode = app.card_window.state == "interactive" and app.lyric_window.state == "passive"
         app.cancel_mode()
         qt_image = glyph.pixelColor(0, 0).alpha() == 0 and card.pixelColor(16, 16).alpha() > 0
-        checks = {"transparent_background": qt_image, "passive_hwnd_styles": all(passive),
+        try:
+            ssl.create_default_context()
+            catalog_tls = True
+        except (OSError, ValueError):
+            catalog_tls = False
+        checks = {"catalog_tls": catalog_tls,
+                  "transparent_background": qt_image, "passive_hwnd_styles": all(passive),
                   "pause": frozen is not None, "seek": seek, "new_track": switched,
                   "interaction_isolated": mode, "escape_handler": app.card_window.state == "passive",
                   "tray_visible": app.tray.isVisible()}

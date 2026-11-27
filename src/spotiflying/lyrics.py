@@ -105,20 +105,26 @@ def track_key(title, artist, album, duration):
     return "|".join((normalize(title), normalize(artist), normalize(album), str(round(duration / 1000))))
 
 
+def catalog_name(value):
+    decomposed = unicodedata.normalize("NFKD", value)
+    return normalize("".join(char for char in decomposed if not unicodedata.combining(char)))
+
+
 def select(track, candidates):
+    track_title, track_artist, track_album = map(catalog_name, (track.title, track.artist, track.album))
     matches = []
     for row in candidates:
         title, artist, album = (str(row.get(k) or "") for k in ("trackName", "artistName", "albumName"))
         seconds = row.get("duration")
         if not isinstance(seconds, (int, float)) or not 0 < seconds < 86400 or not track.duration:
             continue
-        if normalize(track.title) != normalize(title) or normalize(track.artist) != normalize(artist):
+        if track_title != catalog_name(title) or track_artist != catalog_name(artist):
             continue
         if versions(track.title + " " + track.album) != versions(title + " " + album):
             continue
         gap = abs(track.duration / 1000 - seconds)
         if gap <= 3:
-            same_album = bool(track.album and normalize(track.album) == normalize(album))
+            same_album = bool(track_album and track_album == catalog_name(album))
             matches.append((10 * same_album - gap, row))
     matches.sort(key=lambda item: item[0], reverse=True)
     if matches and (len(matches) == 1 or matches[0][0] - matches[1][0] >= 1.5):

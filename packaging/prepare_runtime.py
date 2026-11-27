@@ -1,10 +1,16 @@
 """Resolve DLL collisions caused by PyInstaller's transitive dependency scan."""
+import ssl
 from pathlib import Path
 from shutil import copyfile
 
 import pefile
 
 internal = Path("dist/SpotiFlying/_internal")
+
+# Some Python runtimes load this distrust list beside ssl.py on every TLS context.
+distrust_list = Path(ssl.__file__).with_name("codex-rejected-cas.pem")
+if distrust_list.is_file():
+    copyfile(distrust_list, internal / distrust_list.name)
 icu = internal / "icuuc.dll"
 if icu.is_file():
     library = pefile.PE(icu, fast_load=True)
